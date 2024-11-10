@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wallpaper Changer</title>
+    <style>
+        .wallpaper-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .wallpaper-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .wallpaper-item:hover {
+            transform: scale(1.05);
+        }
+        .wallpaper-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .preview {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        /* Media Queries for Smartphones */
+        
+        /* For phones in portrait mode */
+        @media screen and (max-width: 480px) {
+            .wallpaper-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .wallpaper-item {
+                width: 100%;
+                margin: 0;
+            }
+
+            .wallpaper-item img {
+                width: 100%;
+                height: auto;
+            }
+
+            .preview {
+                height: 200px;
+            }
+        }
+
+        /* For phones in landscape mode */
+        @media screen and (min-width: 481px) and (max-width: 900px) {
+            .wallpaper-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .wallpaper-item {
+                width: 100%;
+                margin: 0;
+            }
+
+            .wallpaper-item img {
+                width: 100%;
+                height: auto;
+            }
+
+            .preview {
+                height: 250px;
+            }
+        }
+
+        /* For iOS-specific adjustments */
+        @supports (-webkit-touch-callout: none) {
+            .wallpaper-container {
+                /* Prevents rubber-band scrolling on iOS */
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .wallpaper-item {
+                /* Prevents highlighting on tap in iOS */
+                -webkit-tap-highlight-color: transparent;
+            }
+        }
+
+        /* For better touch interaction */
+        @media (hover: none) and (pointer: coarse) {
+            .wallpaper-item {
+                padding: 8px;  /* Larger touch target */
+            }
+
+            .wallpaper-item img {
+                border-radius: 8px;  /* Rounded corners for better visual feedback */
+            }
+        }
+
+        /* For notched iPhones */
+        @supports (padding: env(safe-area-inset-top)) {
+            .wallpaper-container {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+
+        /* Alternative Style 1 - Modern Minimal */
+        .wallpaper-number {
+            margin-top: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 15px;
+            background: #f0f0f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Media query for mobile devices */
+        @media screen and (max-width: 480px) {
+            .wallpaper-number {
+                font-size: 14px;
+                padding: 3px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preview"></div>
+    <div class="wallpaper-container">
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1605369572399-05d8d64a0f6e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA2fHxnaXJscyUyMGltYWdlc3xlbnwwfHwwfHx8MA%3D%3D" alt="Wallpaper 1" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">1</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src=https://images.unsplash.com/photo-1556229165-8aa0ceaa93a7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA3fHxnaXJscyUyMGltYWdlc3xlbnwwfHwwfHx8MA%3D%3D" alt="Wallpaper 2" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">2</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1599831094105-64f7be4abdb3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTA4fHxnaXJscyUyMGltYWdlc3xlbnwwfHwwfHx8MA%3D%3D" alt="Wallpaper 3" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">3</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1589081618021-30222f8c3351?q=80&w=388&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 4" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">4</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1559425309-bf0018a09d01?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8a2FzaG1pcmlyJTIwZ2lybHN8ZW58MHx8MHx8fDA%3D" alt="Wallpaper 5" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">5</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1456412684996-31507d7d17b6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8a2FzaG1pcmlyJTIwZ2lybHN8ZW58MHx8MHx8fDA%3D" alt="Wallpaper 6" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">6</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1601288496920-b6154fe3626a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z2lybHMlMjBmYWNlc3xlbnwwfHwwfHx8MA%3D%3D" alt="Wallpaper 7" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">7</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1498032087969-fd7d126f9d0b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Z2lybHMlMjBmYWNlc3xlbnwwfHwwfHx8MA%3D%3D" alt="Wallpaper 8" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">8</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1688375301390-2eff2d89a358?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Z2lybHMlMjBmYWNlc3xlbnwwfHwwfHx8MA%3D%3D" alt="Wallpaper 9" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">9</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1514161955277-4ea47eef2ff9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdpcmxzJTIwZmFjZXN8ZW58MHx8MHx8fDA%3D" alt="Wallpaper 10" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">10</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1496372487738-7b9e5c55ddda?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGdpcmxzJTIwZmFjZXN8ZW58MHx8MHx8fDA%3D" alt="Wallpaper 11" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">11</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1534008757030-27299c4371b6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGdpcmxzJTIwZmFjZXN8ZW58MHx8MHx8fDA%3D" alt="Wallpaper 12" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">12</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1516239482977-b550ba7253f2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGdpcmxzJTIwZmFjZXN8ZW58MHx8MHx8fDA%3D" alt="Wallpaper 13" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">13</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1500336624523-d727130c3328?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGdpcmxzJTIwZmFjZXN8ZW58MHx8MHx8fDA%3D" alt="Wallpaper 14" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">14</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1578774296842-c45e472b3028?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGdpcmxzJTIwZmFjZXN8ZW58MHx8MHx8fDA%3D" alt="Wallpaper 15" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">15</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1589948800952-156ece44e9ff?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D" alt="Wallpaper 16" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">16</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1577565177023-e5ed89947fb5?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D" alt="Wallpaper 17" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">17</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1581419278555-c1dd991fdfd8?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDl8fHxlbnwwfHx8fHw%3D" alt="Wallpaper 18" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">18</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1580019598984-ae6ef6a9ff7a?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExfHx8ZW58MHx8fHx8" alt="Wallpaper 19" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">19</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1574788170925-c2586e1c510d?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzfHx8ZW58MHx8fHx8" alt="Wallpaper 20" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">20</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1664203068007-52240d0ca48f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE2fHx8ZW58MHx8fHx8" alt="Wallpaper 21" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">21</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1577254795437-e5ed89947fb5?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE3fHx8ZW58MHx8fHx8" alt="Wallpaper 22" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">22</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1669704099116-a325b4d6186f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIwfHx8ZW58MHx8fHx8" alt="Wallpaper 23" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">23</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1578505574290-68739d054931?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIyfHx8ZW58MHx8fHx8" alt="Wallpaper 24" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">24</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1559637621-d766677659e8?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIzfHx8ZW58MHx8fHx8" alt="Wallpaper 25" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">25</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src=https://plus.unsplash.com/premium_photo-1670588775983-666b23590ffc?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDI0fHx8ZW58MHx8fHx8" alt="Wallpaper 26" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">26</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1579017331263-ef82f0bbc748?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDI3fHx8ZW58MHx8fHx8" alt="Wallpaper 27" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">27</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1671656333460-793292581bc6?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDI4fHx8ZW58MHx8fHx8" alt="Wallpaper 28" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">28</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1578680671705-0965e325b2ba?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDM0fHx8ZW58MHx8fHx8" alt="Wallpaper 29" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">29</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1579623374984-462747d13f28?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDM1fHx8ZW58MHx8fHx8" alt="Wallpaper 30" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">30</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1668896123988-b1566bb54579?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDQwfHx8ZW58MHx8fHx8" alt="Wallpaper 31" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">31</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1558507652-2d9626c4e67a?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDQzfHx8ZW58MHx8fHx8" alt="Wallpaper 32" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">32</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src=https://images.unsplash.com/photo-1721048149664-cd1546e1f535?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDQ2fHx8ZW58MHx8fHx8" alt="Wallpaper 33" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">33</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1721048149858-139c52892fc9?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDUwfHx8ZW58MHx8fHx8" alt="Wallpaper 34" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">34</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1653936627706-334576773951?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDUxfHx8ZW58MHx8fHx8" alt="Wallpaper 35" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">35</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1584531910632-0c55032af6d8?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDUzfHx8ZW58MHx8fHx8" alt="Wallpaper 36" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">36</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1693569444434-85aa71939cd4?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDU1fHx8ZW58MHx8fHx8" alt="Wallpaper 37" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">37</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1676741376344-87ed0ac0bcaf?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDYzfHx8ZW58MHx8fHx8" alt="Wallpaper 38" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">38</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1668895511243-641f5db8dbd1?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDY3fHx8ZW58MHx8fHx8" alt="Wallpaper 39" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">39</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1583691919795-b66ab8cb40c5?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDc0fHx8ZW58MHx8fHx8" alt="Wallpaper 40" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">40</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1659800783158-ea91cfb283c4?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDg2fHx8ZW58MHx8fHx8" alt="Wallpaper 41" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">41</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1668790692422-1bed034b1ed1?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDg3fHx8ZW58MHx8fHx8" alt="Wallpaper 42" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">42</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1590309599541-b2730d0ecbc0?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDg5fHx8ZW58MHx8fHx8" alt="Wallpaper 43" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">43</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1612999590549-978cfde66b66?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDk0fHx8ZW58MHx8fHx8" alt="Wallpaper 44" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">44</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1727289667130-4db1a6124cf8?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEwMnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 45" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">45</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1570985333372-d735daa2596f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEwNnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 46" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">46</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1579411345433-bb529fa30881?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExMHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 47" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">47</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1615744951948-10efea063a44?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExMnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 48" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">48</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1662830571588-3a82488cf38b?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExM3x8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 49" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">49</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1702813922149-9a949655919f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExNHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 50" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">50</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src=https://plus.unsplash.com/premium_photo-1668485968642-30e3d15e9b9c?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExNXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 51" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">51</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1654336204039-d093c7c5e9d0?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEyMHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 52" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">52</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1580683009166-7da8e09fc5dc?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEyM3x8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 53" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">53</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1702810534189-4f3c81cc78a4?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEyNXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 54" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">54</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src=https://images.unsplash.com/photo-1659800776839-75192d08417a?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzMnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 55" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">55</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1692439073944-d6aa4a558a48?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzNHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 56" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">56</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1542594452-f6a29cadbb22?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzNnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 57" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">57</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1704347918409-f2cc3fc29b25?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzN3x8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 58" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">58</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1579463148228-138296ac3b98?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzNXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 59" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">59</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1616840420121-7ad8ed885f11?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEzOXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 60" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">60</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1727463135266-5fba0f88602d?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE1NHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 61" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">61</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1722270606350-e7be9fb9eb1e?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE0OHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 62" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">62</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1654336204888-ddc8fb50eb24?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 63" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">63</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1664875849194-0adbac28529f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDMyMHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 64" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">64</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1654336204566-eb251212c432?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEwfHx8ZW58MHx8fHx8" alt="Wallpaper 65" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">65</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1658322728466-145ef2875daf?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE5fHx8ZW58MHx8fHx8" alt="Wallpaper 66" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">66</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1680078227776-a4ea97697f5c?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE2OXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 67" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">67</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1594185230805-68f37369b450?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4MHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 68" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">68</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1673443314719-aa8948a09a3f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4M3x8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 69" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">69</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1670282393309-70fd7f8eb1ef?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE5MHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 70" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">70</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1646845642545-0223773addaa?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE5NXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 71" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">71</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1654340417859-600c46a50b33?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE5N3x8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 72" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">72</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1591727884968-cc11135a19b3?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE5OXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 73" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">73</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1705847870569-0115c42d0c39?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIwNXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 74" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">74</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1515552868968-a119fcb51395?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIwNnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 75" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">75</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1698215491641-9b70811f9027?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIxMHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 76" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">76</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1673957753717-8cd192d857cb?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDMxNnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 77" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">77</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1727289667129-73965c5be0c5?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIxNHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 78" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">78</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1718389310688-3baf83794e29?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIyM3x8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 79" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">79</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1584896433712-364172f074ec?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIyNnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 80" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">80</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1571663936518-0925ee55d95a?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIzNHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 81" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">81</span>        
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1664869376844-351736a92fe0?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDI0MXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 82" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">82</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1648377024500-328100a823f1?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDI0M3x8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 83" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">83</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1674867688573-e2e3a46ac03f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDI1MHx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 84" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">84</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1651216922641-dfba91e4bd50?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDI2Nnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 85" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">85</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://images.unsplash.com/photo-1557296387-5358ad7997bb?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDI4Nnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 86" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">86</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1671541401880-7c9c0b19b3c4?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDMzfHx8ZW58MHx8fHx8" alt="Wallpaper 87" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">87</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1674498702986-a0e4e0ae5835?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDM5fHx8ZW58MHx8fHx8" alt="Wallpaper 88" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">88</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1668485968590-aff3717c1dbe?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDU0fHx8ZW58MHx8fHx8" alt="Wallpaper 89" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">89</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1668485968645-fc8c96ee0afb?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDc5fHx8ZW58MHx8fHx8" alt="Wallpaper 90" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">90</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1668485968528-115bf4ecede7?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDkxfHx8ZW58MHx8fHx8" alt="Wallpaper 91" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">91</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1670776970825-525539c02d68?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDk5fHx8ZW58MHx8fHx8" alt="Wallpaper 92" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">92</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1674043555397-7f1215050e4f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExN3x8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 93" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">93</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1673367754249-223b150f24a1?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExOXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 94" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">94</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1669824394348-f5cac6eab7d4?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDQ0NXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 95" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">95</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1669824394345-9a55041484d7?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE1MXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 96" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">96</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1668485968649-a9ea9c166bf9?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE1NXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 97" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">97</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1669740216623-6f898c3e970f?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIxMXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 98" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">98</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1669725348425-b2eb1d35b2e7?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDIyMnx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 99" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">99</span>
+        </div>
+        <div class="wallpaper-item">
+            <img src="https://plus.unsplash.com/premium_photo-1727943085898-a0270d73c508?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDMwNXx8fGVufDB8fHx8fA%3D%3D" alt="Wallpaper 100" onclick="changeWallpaper(this.src)">
+            <span class="wallpaper-number">100</span>
+        </div>
+    </div>
+
+    <script>
+        function changeWallpaper(src) {
+            document.querySelector('.preview').style.backgroundImage = `url(${src})`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const wallpaperItems = document.querySelectorAll('.wallpaper-item');
+            
+            wallpaperItems.forEach(item => {
+                item.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                
+                item.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
